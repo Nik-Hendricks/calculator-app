@@ -12,7 +12,6 @@ class ColorPicker extends Component{
 
         var color_picker = document.createElement("input")
         color_picker.setAttribute("type", "color")
-        console.log(color_picker)
 
         color_picker.addEventListener("input", (e) => {
             window.VM.set_theme_property('--theme-primary-color', e.target.value)

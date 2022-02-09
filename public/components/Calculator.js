@@ -109,35 +109,14 @@ class Calculator extends Component{
             "_=":{
                 onclick: () => {
                     var eval_string = this.calculator_output.value.toLowerCase();
-                    console.log(this.calc_mode)
+
                     //convert all instances of "resin(x)" to "asin(x)"
-
-   
                     var result = eval_string.split('resin(').join('asin(');
-                    console.log(result)
+
                     if(this.calc_mode == 'deg'){
-                
-                        //var nums = this.grab_numbers_from_string(result.replace(/\D/g, " "));
-                        //var new_nums = [];
                         result = result.replace(/\d+(?:\.\d+)?/g, x => x * 180 / Math.PI)
-                        //for(var i = 0; i < nums.length; i++){
-                        //    var n = nums[i] * (180/Math.PI)
-                        //    new_nums[i] = n
-                        //}
-                        //console.log(new_nums)
-                        //var res;
-                        //for(var i = 0; i < nums.length; i++){
-                        //    console.log(result.indexOf(nums[i]))
-                        //    res = result.replace(result.indexOf(nums[i]), new_nums[i])
-                        //}
-
-
-
-                        //result = result.split('cos(').join('cos(180/pi * ').split('sin(').join('sin(180/pi * ')
                     }
                   
-                    console.log(result)
-    
                     window.API2.evaluate(result).then(res => {
                         if(res.result){
                             this.calculator_history.innerHTML += `<div class="history-item"><p class="primary">${eval_string}</p><p class="secondary">${res.result}</p><p class="calculator-mode">${this.calc_mode}</p></div><hr>`
@@ -166,7 +145,6 @@ class Calculator extends Component{
         this.calculator_history = document.getElementById('calculator-history');
 
         for(var key in this.buttons){
-            console.log(this.buttons[key].class)
             var btn = document.createElement('div');
             btn.classList.add('calculator-btn')
             if(this.buttons[key].class){
@@ -179,7 +157,6 @@ class Calculator extends Component{
     }
 
     calc_mode_toggle(e){
-        console.log('toggle')
         if(this.calc_mode == "deg"){
             this.calc_mode = "rad"
         }else{

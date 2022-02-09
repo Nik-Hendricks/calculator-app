@@ -7,7 +7,6 @@ class CodeFormat extends Component {
 
     connectedCallback(){
         this.text_content = String(this.innerHTML);
-        console.log(this.text_content);
         this.innerText = this.text_content;
         this.classList.add('code-format')
     }

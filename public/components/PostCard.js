@@ -29,7 +29,6 @@ class PostCard extends Component {
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
-        console.log(attr)
         this.update();
         
     }

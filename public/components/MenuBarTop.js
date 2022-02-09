@@ -19,7 +19,6 @@ class MenuBarTop extends Component{
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
-        console.log(attr)
         if(attr == 'title'){
             this.update();
         }

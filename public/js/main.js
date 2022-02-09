@@ -44,7 +44,6 @@ window.onload = () => {
         if(getMobileOperatingSystem() == "iOS"){
             if(window.navigator.standalone == true){
                 document.body.style.paddingTop = "40px";
-                console.log(document.getElementsByTagName("menu-bar-top")[0])
                 document.getElementsByTagName("main-content")[0].style.top = "100px"
             }
         }

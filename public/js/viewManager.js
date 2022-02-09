@@ -30,7 +30,6 @@ function _set_view(view, sub_view){
         }else{
             if(sub_view){
                 if(routes[view].subViews){
-                    console.log('sub_view')
                     var counter = 0;
                     for(var key in routes[view].subViews){
                         if(key == "*"  && counter == 0){
@@ -53,7 +52,6 @@ function _set_view(view, sub_view){
                     }
   
                 }else{
-                    console.log('no')
                     window.history.back();
                 }
             }else{
