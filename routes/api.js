@@ -12,7 +12,6 @@ module.exports = (() => {
     var API = require('express').Router();
 
     API.use( ( req, res, next ) => {
-        console.log(req.originalUrl)
         req.g_uid = req.cookies.g_uid;
         req.public_uid = req.cookies.public_uid;
         next()

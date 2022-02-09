@@ -114,9 +114,10 @@ class Calculator extends Component{
                     var result = eval_string.split('resin(').join('asin(');
 
                     if(this.calc_mode == 'deg'){
-                        result = result.replace(/\d+(?:\.\d+)?/g, x => x * 180 / Math.PI)
+                        result = result.replace(/\d+(?:\.\d+)?/g, x => `(${x} deg )`)
                     }
                   
+                    console.log(result)
                     window.API2.evaluate(result).then(res => {
                         if(res.result){
                             this.calculator_history.innerHTML += `<div class="history-item"><p class="primary">${eval_string}</p><p class="secondary">${res.result}</p><p class="calculator-mode">${this.calc_mode}</p></div><hr>`
