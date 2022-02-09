@@ -1,5 +1,12 @@
 import {Component} from '/components/Component.js';
 
+String.prototype.insert = function(index, string) {
+  if (index > 0) {
+    return this.substring(0, index) + string + this.substr(index);
+  }
+  return string + this;
+};
+
 class Calculator extends Component{
     constructor(){
         super();
@@ -109,15 +116,32 @@ class Calculator extends Component{
                     var result = eval_string.split('resin(').join('asin(');
                     console.log(result)
                     if(this.calc_mode == 'deg'){
-                        result = result.split('cos(').join('cos((180/pi) *').split('sin(').join('sin((180/pi) *')
+                
+                        //var nums = this.grab_numbers_from_string(result.replace(/\D/g, " "));
+                        //var new_nums = [];
+                        result = result.replace(/\d+(?:\.\d+)?/g, x => x * 180 / Math.PI)
+                        //for(var i = 0; i < nums.length; i++){
+                        //    var n = nums[i] * (180/Math.PI)
+                        //    new_nums[i] = n
+                        //}
+                        //console.log(new_nums)
+                        //var res;
+                        //for(var i = 0; i < nums.length; i++){
+                        //    console.log(result.indexOf(nums[i]))
+                        //    res = result.replace(result.indexOf(nums[i]), new_nums[i])
+                        //}
+
+
+
+                        //result = result.split('cos(').join('cos(180/pi * ').split('sin(').join('sin(180/pi * ')
                     }
-
+                  
                     console.log(result)
-
+    
                     window.API2.evaluate(result).then(res => {
                         if(res.result){
-                            
-                            this.calculator_history.innerHTML += `<p class="primary">${eval_string}</p></br><p class="secondary">${res.result}<p><hr>`
+                            this.calculator_history.innerHTML += `<div class="history-item"><p class="primary">${eval_string}</p><p class="secondary">${res.result}</p><p class="calculator-mode">${this.calc_mode}</p></div><hr>`
+                            localStorage.setItem(eval_string, [res.result, this.calc_mode])
                         }
 
                     })
@@ -163,6 +187,15 @@ class Calculator extends Component{
         }
         e.path[0].innerHTML = this.calc_mode
     }
+
+    grab_numbers_from_string(string){
+        return string.match(/\d+/g)   
+    }
+
+    is_numeric(str){
+        return /^\d+$/.test(str);
+    }
+
 
 }
 window.customElements.define('custom-calculator', Calculator);

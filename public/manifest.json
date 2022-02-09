@@ -14,7 +14,7 @@
         "purpose":"maskable"
       }
     ],
-    "start_url": "http://192.168.0.3",
+    "start_url": "http://147.182.241.143:82/Calculator",
     "background_color": "#232931",
     "display": "standalone",
     "scope": "",
