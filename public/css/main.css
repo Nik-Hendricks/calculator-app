@@ -1029,6 +1029,22 @@ hr{
     margin-top:var(--global-margin) !important;
 }
 
+.calculator-error{
+    position:absolute;
+    top:0px;
+    right:0px;
+    left:0px;
+    height:0px;
+    background:#e74c3c;
+    border-radius: var(--global-border-radius);
+    transition: ease-in-out .3s;
+}
+
+.calculator-error.opened{
+    height:auto;
+    transition: ease-in-out .3s;
+}
+
 @media only screen and (min-width: 350px) {
     .card{
         margin-left:auto;

@@ -7,7 +7,9 @@ class SettingsView extends View{
 
     connectedCallback(){
         this.classList.add('view')
-        this.innerHTML =    `<color-picker></color-picker>`
+        this.innerHTML =    `<color-picker></color-picker>
+                            </br>
+                            <list-item icon="info" text="Add function"></list-item>`
 
 
         window.DP.dispatch("VIEW_LOAD")

@@ -7,6 +7,10 @@ String.prototype.insert = function(index, string) {
   return string + this;
 };
 
+String.prototype.replaceBetween = function(start, end, what) {
+  return this.substring(0, start) + what + this.substring(end);
+};
+
 class Calculator extends Component{
     constructor(){
         super();
@@ -109,19 +113,32 @@ class Calculator extends Component{
             "_=":{
                 onclick: () => {
                     var eval_string = this.calculator_output.value.toLowerCase();
+                    var result = eval_string.replace(/resin\((\d+\.?\d*)\)/g, (_, x) => parseInt(392.9 * parseFloat(x)))
 
-                    //convert all instances of "resin(x)" to "asin(x)"
-                    var result = eval_string;
-
-                    if(this.calc_mode == 'deg'){
-                        result = result.replace(/\d+(?:\.\d+)?/g, x => `(${x} deg )`)
+                    if(this.calc_mode == 'deg'){   
+                        
+                        result = result.replace(/\d+(?:\.\d+)?/g, x => `${x}deg`)
+                        
                     }
-                    var result = eval_string.split('resin(').join('392.9 * (');
+
                     console.log(result)
+
+                    
+
+
+                    console.log(result) 
                     window.API2.evaluate(result).then(res => {
                         if(res.result){
                             this.calculator_history.innerHTML += `<div class="history-item"><p class="primary">${eval_string}</p><p class="secondary">${res.result}</p><p class="calculator-mode">${this.calc_mode}</p></div><hr>`
                             localStorage.setItem(eval_string, [res.result, this.calc_mode])
+                        }
+                        if(res.error){
+                            this.calculator_error.innerHTML += `<p>${res.error}</p>`
+                            this.calculator_error.classList.add('opened')
+                            setTimeout(() => {
+                                this.calculator_error.classList.remove('opened')
+                                this.calculator_error.innerHTML = ''
+                            }, 2500);
                         }
 
                     })
@@ -133,7 +150,8 @@ class Calculator extends Component{
         this.calc_mode = 'rad'
 
 
-        this.innerHTML = `<input id="calculator-output" class="calculator-output" type="text"/>
+        this.innerHTML = `  <div id="calculator-error" class="calculator-error"></div>
+                            <input id="calculator-output" class="calculator-output" type="text"/>
                             <div id="calculator" class="calculator">
 
                             </div>
@@ -144,6 +162,7 @@ class Calculator extends Component{
         this.calculator = document.getElementById('calculator')
         this.calculator_output = document.getElementById('calculator-output');
         this.calculator_history = document.getElementById('calculator-history');
+        this.calculator_error = document.getElementById('calculator-error')
 
         for(var key in this.buttons){
             var btn = document.createElement('div');
@@ -172,6 +191,21 @@ class Calculator extends Component{
 
     is_numeric(str){
         return /^\d+$/.test(str);
+    }
+
+    find_closing_paren(text, openPos) {
+        var closePos = openPos;
+        var counter = 1;
+        while (counter > 0) {
+            var c = text[++closePos];
+            if (c == '(') {
+                counter++;
+            }
+            else if (c == ')') {
+                counter--;
+            }
+        }
+        return closePos;
     }
 
 
