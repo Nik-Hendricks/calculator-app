@@ -117,7 +117,7 @@ class Calculator extends Component{
 
                     if(this.calc_mode == 'deg'){   
                         
-                        result = result.replace(/\d+(?:\.\d+)?/g, x => `${x}deg`)
+                        result = result.replace(/(\d)(?!.*\\)(?!.*\d)/, x => `${x}deg`)
                         
                     }
 
