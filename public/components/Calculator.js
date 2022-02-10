@@ -116,9 +116,13 @@ class Calculator extends Component{
                     var result = eval_string.replace(/resin\((\d+\.?\d*)\)/g, (_, x) => parseInt(392.9 * parseFloat(x)))
 
                     if(this.calc_mode == 'deg'){   
-                        
-                        result = result.replace(/(\d)(?!.*\\)(?!.*\d)/, x => `${x}deg`)
-                        
+                        console.log(`Pre Parse: ${result}`)
+                        //result = result.replace(/(\d)(?!.*\\)(?!.*\d)/, x => `${x}deg`)
+                        //result = result.replace(/\d+(?:\.\d+)?/g, x => `${x}deg`)
+                        //result = result.replace(/\)/g,'deg)')
+                        //result = result.replace(/([\d\.]+)(\))/g,'$1deg)')
+                        //result = result.replace(/([\d\.]+)(\))/g,'$1deg)')
+                        result = result.replace(/([\d\.]+)(?!.\d)/g, '($1deg)')
                     }
                     console.log(`Parsed result: ${result}`) 
                     window.API2.evaluate(result).then(res => {

@@ -9,7 +9,7 @@ class SettingsView extends View{
         this.classList.add('view')
         this.innerHTML =    `<color-picker></color-picker>
                             </br>
-                            <list-item icon="info" text="Add function"></list-item>`
+                            <list-item icon="info" onclick="window.history.pushState('','','/Settings/AddFunction')" text="Add function"></list-item>`
 
 
         window.DP.dispatch("VIEW_LOAD")

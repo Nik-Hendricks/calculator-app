@@ -26,6 +26,7 @@ import {Calculator} from '/components/Calculator.js';
 import {CalculatorView} from '/views/CalculatorView.js';
 import {SettingsView} from '/views/SettingsView.js';
 import {HistoryView} from '/views/HistoryView.js';
+import {AddFunctionView} from '/views/AddFunctionView.js';
 
 
 
@@ -110,7 +111,13 @@ function register_views(){
         },
         "Settings":{
             title:"Settings",
-            view:`<settings-view></settings-view>`
+            view:`<settings-view></settings-view>`,
+            subViews:{
+                "AddFunction":{
+                    title:"Add Function",
+                    view:`<add-function-view></add-function-view>`
+                }
+            }
         },
         "Calculator":{
             title:"Calculator",

@@ -943,7 +943,9 @@ hr{
 
 .calculator{
     width:100%;
+    max-width: 350px;
     height:440px;
+    margin:auto;
 }
 
 .calculator-btn{
@@ -973,8 +975,13 @@ hr{
 
 .calculator-output{
     width:calc(100% - 5px) !important;
+    max-width:350px;
+    margin-left:50% !important;
+    position:relative;
+    left:-175px !important;
     height:55px !important;
     margin-bottom:10px !important;
+    margin-left:var(--global-margin);
     background: var(--theme-card-color) !important;
     outline:none;
     padding-left:10px;
@@ -1031,6 +1038,7 @@ hr{
 
 .calculator-error{
     position:absolute;
+    z-index:99;
     top:0px;
     right:0px;
     left:0px;
@@ -1045,7 +1053,7 @@ hr{
     transition: ease-in-out .3s;
 }
 
-@media only screen and (min-width: 350px) {
+@media only screen and (min-width: 500px) {
     .card{
         margin-left:auto;
         margin-right:auto;
@@ -1057,7 +1065,7 @@ hr{
     }
 
     main-content{
-        width:350px;
+        width:500px;
         margin:auto;
     }
     
