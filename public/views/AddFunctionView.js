@@ -7,7 +7,7 @@ class AddFunctionView extends View{
 
     connectedCallback(){
         this.classList.add('view')
-        this.innerHTML =    `<input type="text" placeholder="name"/>`
+        this.innerHTML =    `<input type="text" placeholder="name"></input>`
 
 
         window.DP.dispatch("VIEW_LOAD")

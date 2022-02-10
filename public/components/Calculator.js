@@ -117,12 +117,20 @@ class Calculator extends Component{
 
                     if(this.calc_mode == 'deg'){   
                         console.log(`Pre Parse: ${result}`)
-                        //result = result.replace(/(\d)(?!.*\\)(?!.*\d)/, x => `${x}deg`)
+                        //result = result.replace(/(\d)(?!.*\\)(?!.*\d)/, x => `${x}deg`) // gets last ocurance regardless
                         //result = result.replace(/\d+(?:\.\d+)?/g, x => `${x}deg`)
                         //result = result.replace(/\)/g,'deg)')
                         //result = result.replace(/([\d\.]+)(\))/g,'$1deg)')
                         //result = result.replace(/([\d\.]+)(\))/g,'$1deg)')
-                        result = result.replace(/([\d\.]+)(?!.\d)/g, '($1deg)')
+                        //result = result.replace(/([\d\.]+)(?!.\d)/g, '($1deg)')
+
+                        //result = result.replace(/([\d\.]+)(?!.d)/g, '($1deg)')
+                        
+                        result = result.replace(/\((?<first>.*?)(?<last>[\d.]+)\)/g,(match, first, last) => 
+                            `(${ first }${ last }deg)`
+                        )
+                        console.log(`Parse 1 result: ${result}`)
+                        //console.log(result.match())
                     }
                     console.log(`Parsed result: ${result}`) 
                     window.API2.evaluate(result).then(res => {
