@@ -111,7 +111,7 @@ class Calculator extends Component{
                     var eval_string = this.calculator_output.value.toLowerCase();
 
                     //convert all instances of "resin(x)" to "asin(x)"
-                    var result = eval_string.split('resin(').join('asin(');
+                    var result = eval_string.split('resin(').join('392.9 * (');
 
                     if(this.calc_mode == 'deg'){
                         result = result.replace(/\d+(?:\.\d+)?/g, x => `(${x} deg )`)
