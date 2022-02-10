@@ -120,13 +120,7 @@ class Calculator extends Component{
                         result = result.replace(/(\d)(?!.*\\)(?!.*\d)/, x => `${x}deg`)
                         
                     }
-
-                    console.log(result)
-
-                    
-
-
-                    console.log(result) 
+                    console.log(`Parsed result: ${result}`) 
                     window.API2.evaluate(result).then(res => {
                         if(res.result){
                             this.calculator_history.innerHTML += `<div class="history-item"><p class="primary">${eval_string}</p><p class="secondary">${res.result}</p><p class="calculator-mode">${this.calc_mode}</p></div><hr>`
