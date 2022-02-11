@@ -119,58 +119,53 @@ class Calculator extends Component{
             "_=":{
                 onclick: () => {
                     var eval_string = this.calculator_output.value.toLowerCase();
-                    var result = eval_string.replace(/resin\((\d+\.?\d*)\)/g, (_, x) => parseInt(392.9 * parseFloat(x)))
-                        
-                    var each_resin = eval_string.match(/(?<=resin\()(.*?)(?=\))/g)
-                    console.log(each_resin)
-                    var each_resin_result = []
-                    for(var i = 0; i < each_resin.length; i++){
-                        console.log(each_resin[i])
-                        window.API2.evaluate(each_resin[i]).then(res => {
-                            each_resin_result.push(res.result * 392.9)
-                        })                    
+                    var result = eval_string
+                    var get_resin = /(resin\()/g , match;
+                    var sub_evals = {}
+
+                    while ((match = get_resin.exec(eval_string)) != null) {
+                        var actual_index = parseInt(match.index + 5)
+                        var sub_eval_string = this.get_bracket_param(eval_string, actual_index);
+                        window.API2.evaluate(sub_eval_string).then(res => {
+                            var start = actual_index + 1;
+                            var end = actual_index + sub_eval_string.length + 1;
+                            result = eval_string.replaceBetween(start, end, res.result)
+                        })        
                     }
 
+                    //now we update the string
                     setTimeout(() => {
-                        console.log(each_resin_result)
-                    }, 500)
+                        console.log(result)
 
-                    
-
-                    
-
-                    if(this.calc_mode == 'deg'){   
-                        console.log(`Pre Parse: ${result}`)
-                        //result = result.replace(/(\d)(?!.*\\)(?!.*\d)/, x => `${x}deg`) // gets last ocurance regardless
-                        //result = result.replace(/\d+(?:\.\d+)?/g, x => `${x}deg`)
-                        //result = result.replace(/\)/g,'deg)')
-                        //result = result.replace(/([\d\.]+)(\))/g,'$1deg)')
-                        //result = result.replace(/([\d\.]+)(\))/g,'$1deg)')
-                        //result = result.replace(/([\d\.]+)(?!.\d)/g, '($1deg)')
-                        //result = result.replace(/([\d\.]+)(?!.d)/g, '($1deg)')
+                        result = result.replace(/resin\((\d+\.?\d*)\)/g, (_, x) => parseInt(392.9 * parseFloat(x)))
+         
+                        console.log(result)
                         
-                        result = result.replace(/(?<![.\d])(?<number>\d*(?:\.\d+)?)\s*\)/g,(match, number) => 
-                            `${ number }deg)`
-                        )
-                        console.log(`Parse 1 result: ${result}`)
-        
-                    }
-                    console.log(`Parsed result: ${result}`) 
-                    window.API2.evaluate(result).then(res => {
-                        if(res.result){
-                            this.calculator_history.innerHTML += `<div class="history-item"><p class="primary">${eval_string}</p><p class="secondary">${res.result}</p><p class="calculator-mode">${this.calc_mode}</p></div><hr>`
-                            localStorage.setItem(eval_string, [res.result, this.calc_mode])
-                        }
-                        if(res.error){
-                            this.calculator_error.innerHTML += `<p>${res.error}</p>`
-                            this.calculator_error.classList.add('opened')
-                            setTimeout(() => {
-                                this.calculator_error.classList.remove('opened')
-                                this.calculator_error.innerHTML = ''
-                            }, 2500);
+                        if(this.calc_mode == 'deg'){   
+                            console.log(`Pre Parse: ${result}`)                      
+                            result = result.replace(/(?<![.\d])(?<number>\d*(?:\.\d+)?)\s*\)/g,(match, number) => `${ number }deg)`)
+                            console.log(`Parse 1 result: ${result}`)
+
                         }
 
-                    })
+                        console.log(`Parsed result: ${result}`) 
+
+                        window.API2.evaluate(result).then(res => {
+                            if(res.result){
+                                this.calculator_history.innerHTML += `<div class="history-item"><p class="primary">${eval_string}</p><p class="secondary">${res.result}</p><p class="calculator-mode">${this.calc_mode}</p></div><hr>`
+                                localStorage.setItem(eval_string, [res.result, this.calc_mode])
+                            }
+                            if(res.error){
+                                this.calculator_error.innerHTML += `<p>${res.error}</p>`
+                                this.calculator_error.classList.add('opened')
+                                setTimeout(() => {
+                                    this.calculator_error.classList.remove('opened')
+                                    this.calculator_error.innerHTML = ''
+                                }, 2500);
+                            }
+
+                        })
+                    }, 800)
                 },
                 class:'double',
             }
@@ -222,19 +217,29 @@ class Calculator extends Component{
         return /^\d+$/.test(str);
     }
 
-    find_closing_paren(text, openPos) {
-        var closePos = openPos;
-        var counter = 1;
-        while (counter > 0) {
-            var c = text[++closePos];
-            if (c == '(') {
-                counter++;
-            }
-            else if (c == ')') {
-                counter--;
-            }
+    get_bracket_param(str, pos){
+        var closing_pos = this.find_closing_bracket_index(str, pos)
+        return(str.substring(pos + 1, closing_pos))
+    }
+
+    find_closing_bracket_index(str, pos) {
+        if (str[pos] != '(') {
+            throw new Error("No '(' at index " + pos);
         }
-        return closePos;
+        let depth = 1;
+        for (let i = pos + 1; i < str.length; i++) {
+            switch (str[i]) {
+            case '(':
+                depth++;
+                break;
+            case ')':
+                if (--depth == 0) {
+                    return i;
+                }
+                 break;
+            }   
+        }
+        return -1;    // No matching closing parenthesis
     }
 
 
