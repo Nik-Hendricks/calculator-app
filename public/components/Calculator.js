@@ -17,6 +17,12 @@ class Calculator extends Component{
     }
 
     connectedCallback(){
+        this.functions = {
+            'resin':{
+                equation:'',
+            }
+        }
+
         this.buttons = {
             "_AC":{
                 onclick: () => {
@@ -114,6 +120,24 @@ class Calculator extends Component{
                 onclick: () => {
                     var eval_string = this.calculator_output.value.toLowerCase();
                     var result = eval_string.replace(/resin\((\d+\.?\d*)\)/g, (_, x) => parseInt(392.9 * parseFloat(x)))
+                        
+                    var each_resin = eval_string.match(/(?<=resin\()(.*?)(?=\))/g)
+                    console.log(each_resin)
+                    var each_resin_result = []
+                    for(var i = 0; i < each_resin.length; i++){
+                        console.log(each_resin[i])
+                        window.API2.evaluate(each_resin[i]).then(res => {
+                            each_resin_result.push(res.result * 392.9)
+                        })                    
+                    }
+
+                    setTimeout(() => {
+                        console.log(each_resin_result)
+                    }, 500)
+
+                    
+
+                    
 
                     if(this.calc_mode == 'deg'){   
                         console.log(`Pre Parse: ${result}`)
@@ -123,14 +147,13 @@ class Calculator extends Component{
                         //result = result.replace(/([\d\.]+)(\))/g,'$1deg)')
                         //result = result.replace(/([\d\.]+)(\))/g,'$1deg)')
                         //result = result.replace(/([\d\.]+)(?!.\d)/g, '($1deg)')
-
                         //result = result.replace(/([\d\.]+)(?!.d)/g, '($1deg)')
                         
-                        result = result.replace(/\((?<first>.*?)(?<last>[\d.]+)\)/g,(match, first, last) => 
-                            `(${ first }${ last }deg)`
+                        result = result.replace(/(?<![.\d])(?<number>\d*(?:\.\d+)?)\s*\)/g,(match, number) => 
+                            `${ number }deg)`
                         )
                         console.log(`Parse 1 result: ${result}`)
-                        //console.log(result.match())
+        
                     }
                     console.log(`Parsed result: ${result}`) 
                     window.API2.evaluate(result).then(res => {
